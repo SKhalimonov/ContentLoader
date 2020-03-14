@@ -1,42 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using ContentLoader.Core.Services;
+using ContentLoader.Model;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ContentLoader.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAnyOrigin")]
     public class ContentController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private readonly IContentLoaderService _contentLoaderService;
+
+        public ContentController(IContentLoaderService contentLoaderService)
         {
-            return new string[] { "value1", "value2" };
+            _contentLoaderService = contentLoaderService;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Upload([FromBody]UploadVideoModel uploadModel)
         {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var fileContents = await _contentLoaderService.DownloadVideoByUrlAsync(uploadModel.Url);
+            return File(fileContents, "video/mp4");
         }
     }
 }
