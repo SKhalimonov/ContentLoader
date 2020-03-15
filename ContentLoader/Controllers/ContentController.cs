@@ -2,6 +2,7 @@
 using ContentLoader.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace ContentLoader.Controllers
@@ -18,11 +19,42 @@ namespace ContentLoader.Controllers
             _contentLoaderService = contentLoaderService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Upload([FromBody]UploadVideoModel uploadModel)
+        [HttpGet("info")]
+        public async Task<object> GetInfoAsync([FromQuery]string url)
         {
-            var fileContents = await _contentLoaderService.DownloadVideoByUrlAsync(uploadModel.Url);
-            return File(fileContents, "video/mp4");
+            if (string.IsNullOrEmpty(url))
+            {
+                return BadRequest("Url is required");
+            }
+
+            try
+            {
+                var contentInfo = await _contentLoaderService.GetVideoInfoAsync(url);
+                return Ok(contentInfo);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("download")]
+        public async Task<object> DownloadAsync([FromBody]UploadVideoModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest("model is required");
+            }
+
+            try
+            {
+                var contentInfo = await _contentLoaderService.GetVideoInfoAsync(url);
+                return Ok(contentInfo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
     }
 }

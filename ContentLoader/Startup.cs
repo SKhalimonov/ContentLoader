@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using ContentLoader.Core.Services;
 using ContentLoader.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ContentLoader
 {
@@ -29,6 +23,8 @@ namespace ContentLoader
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddCors(o => o.AddPolicy("AllowAnyOrigin", builder =>
             {
                 builder.AllowAnyMethod()
@@ -36,7 +32,7 @@ namespace ContentLoader
                     .AllowAnyOrigin();
             }));
 
-            services.AddScoped<IContentLoaderService, ContentLoaderService>();
+            services.AddScoped<IContentLoaderService, YoutubeLoaderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
