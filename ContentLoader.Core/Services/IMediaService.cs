@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 
 namespace ContentLoader.Core.Services
 {
-    public interface IContentLoaderService
+    public interface IMediaService
     {
-        string ServiceDomain { get; }
-
         Task<VideoContentInfoDto> GetVideoInfoAsync(string url);
     }
 }

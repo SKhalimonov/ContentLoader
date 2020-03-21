@@ -1,6 +1,4 @@
-﻿using ContentLoader.Core.Extensions;
-using ContentLoader.Core.Services;
-using ContentLoader.Model;
+﻿using ContentLoader.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,13 +9,13 @@ namespace ContentLoader.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAnyOrigin")]
-    public class ContentController : ControllerBase
+    public class MediaController : ControllerBase
     {
-        private readonly IContentLoaderService _contentLoaderService;
+        private readonly IMediaService _mediaService;
 
-        public ContentController(IContentLoaderService contentLoaderService)
+        public MediaController(IMediaService mediaService)
         {
-            _contentLoaderService = contentLoaderService;
+            _mediaService = mediaService;
         }
 
         [HttpGet("info")]
@@ -30,29 +28,10 @@ namespace ContentLoader.Controllers
 
             try
             {
-                var contentInfo = await _contentLoaderService.GetVideoInfoAsync(url);
+                var contentInfo = await _mediaService.GetVideoInfoAsync(url);
                 return Ok(contentInfo);
             }
             catch(Exception ex)
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpPost("download")]
-        public async Task<IActionResult> DownloadAsync([FromBody]UploadVideoModel model)
-        {
-            if (model == null)
-            {
-                return BadRequest("model is required");
-            }
-
-            try
-            {
-                var fileBytes = await _contentLoaderService.DownloadFileAsync(model.Url);
-                return File(fileBytes, model.MediaType.GetMediaTypeName());
-            }
-            catch (Exception ex)
             {
                 return BadRequest();
             }
