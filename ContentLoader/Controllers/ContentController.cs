@@ -1,4 +1,5 @@
-﻿using ContentLoader.Core.Services;
+﻿using ContentLoader.Core.Extensions;
+using ContentLoader.Core.Services;
 using ContentLoader.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,7 @@ namespace ContentLoader.Controllers
         }
 
         [HttpPost("download")]
-        public async Task<object> DownloadAsync([FromBody]UploadVideoModel model)
+        public async Task<IActionResult> DownloadAsync([FromBody]UploadVideoModel model)
         {
             if (model == null)
             {
@@ -48,8 +49,8 @@ namespace ContentLoader.Controllers
 
             try
             {
-                var contentInfo = await _contentLoaderService.GetVideoInfoAsync(url);
-                return Ok(contentInfo);
+                var fileBytes = await _contentLoaderService.DownloadFileAsync(model.Url);
+                return File(fileBytes, model.MediaType.GetMediaTypeName());
             }
             catch (Exception ex)
             {

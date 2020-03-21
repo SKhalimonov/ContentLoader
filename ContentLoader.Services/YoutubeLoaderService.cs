@@ -2,6 +2,7 @@
 using ContentLoader.Core.Entities.Dto;
 using ContentLoader.Core.Services;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Models.MediaStreams;
@@ -50,6 +51,15 @@ namespace ContentLoader.Services
             _mapper.Map(streamInfoSet, videoInfo);
 
             return videoInfo;
+        }
+
+        public async Task<byte[]> DownloadFileAsync(string fileUrl)
+        {
+            var httpClient = new HttpClient();
+
+            var response = await httpClient.GetByteArrayAsync(fileUrl);
+
+            return response;
         }
     }
 }

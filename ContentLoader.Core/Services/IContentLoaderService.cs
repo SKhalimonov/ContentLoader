@@ -5,8 +5,8 @@ namespace ContentLoader.Core.Services
 {
     public interface IContentLoaderService
     {
-        Task<byte[]> DownloadVideoByUrlAsync(string url);
-
         Task<VideoContentInfoDto> GetVideoInfoAsync(string url);
+
+        Task<byte[]> DownloadFileAsync(string fileUrl);
     }
 }

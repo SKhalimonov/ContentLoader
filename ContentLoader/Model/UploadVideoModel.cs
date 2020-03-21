@@ -6,6 +6,6 @@ namespace ContentLoader.Model
     {
         public string Url { get; set; }
 
-        public VideoServiceTypes VideoService { get; set; }
+        public MediaTypes MediaType { get; set; }
     }
 }

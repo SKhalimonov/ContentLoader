@@ -6,6 +6,6 @@ namespace ContentLoader.Core.Entities.Dto
     {
         public string PreviewImageUrl { get; set; }
 
-        public List<DownloadVideoDto> DownloadInfoUrls { get; set; } = new List<DownloadVideoDto>();
+        public List<DownloadMediaDto> DownloadVideoUrls { get; set; } = new List<DownloadMediaDto>();
     }
 }
