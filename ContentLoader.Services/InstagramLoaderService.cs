@@ -3,8 +3,10 @@ using ContentLoader.Core.Configurations;
 using ContentLoader.Core.Entities.Dto;
 using ContentLoader.Core.Services;
 using HtmlAgilityPack;
+using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ContentLoader.Services
@@ -25,28 +27,28 @@ namespace ContentLoader.Services
 
         public async Task<VideoContentInfoDto> GetVideoInfoAsync(string url)
         {
-            var httpClient = new HttpClient();
+            var webDriver = new ChromeDriver();
+            webDriver.Url = url;
 
-            var htmlContent = await httpClient.GetStringAsync(url);
+            var videoNode = webDriver.FindElementByXPath(_config.VideoSelector);
 
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlContent);
-
-            var videoNode = doc.DocumentNode.SelectSingleNode(_config.VideoSelector);
-
-            return new VideoContentInfoDto
+            var result = new VideoContentInfoDto
             {
                 Name = "Instagram Video",
-                PreviewImageUrl = videoNode.Attributes["poster"].Value,
+                PreviewImageUrl = videoNode.GetAttribute("poster"),
                 DownloadVideoUrls = new List<DownloadMediaDto>()
                 {
                     new DownloadMediaDto
                     {
                         MediaTypeLabel = "Mp4",
-                        DownloadUrl = videoNode.Attributes["src"].Value
+                        DownloadUrl = videoNode.GetAttribute("src")
                     }
                 }
             };
+
+            webDriver.Dispose();
+
+            return result;
         }
     }
 }

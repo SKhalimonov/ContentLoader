@@ -30,6 +30,8 @@ namespace ContentLoader.Services
             var videoInfo = _mapper.Map<VideoContentInfoDto>(video);
             _mapper.Map(streamInfoSet, videoInfo);
 
+            //videoInfo.DownloadVideoUrls.ForEach(x => x.DownloadUrl = x.DownloadUrl.Replace("?", $"?title={videoInfo.Name.Replace(" ", "_")}&"));
+
             return videoInfo;
         }
     }

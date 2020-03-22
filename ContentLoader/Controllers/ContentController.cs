@@ -36,5 +36,24 @@ namespace ContentLoader.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("download")]
+        public async Task<object> DownloadVideoAsync([FromQuery]string playerUrl)
+        {
+            if (string.IsNullOrEmpty(playerUrl))
+            {
+                return BadRequest("PlayerUrl is required");
+            }
+
+            try
+            {
+                var contentInfo = await _mediaService.DownloadVideoAsync(playerUrl);
+                return File(contentInfo, "video/mp4");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
