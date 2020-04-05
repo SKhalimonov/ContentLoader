@@ -30,17 +30,19 @@ namespace ContentLoader.Services
             webDriver.Url = url;
 
             var videoNode = webDriver.FindElementByXPath(_config.VideoSelector);
+            var titleNode = webDriver.FindElementByXPath(_config.TitleSelector);
+            var imageNode = webDriver.FindElementByXPath(_config.ImageSelector);
 
             var result = new VideoContentInfoDto
             {
-                Name = "Instagram Video",
-                PreviewImageUrl = videoNode.GetAttribute("poster"),
+                Name = titleNode.GetAttribute("content"),
+                PreviewImageUrl = imageNode.GetAttribute("content"),
                 DownloadVideoUrls = new List<DownloadMediaDto>()
                 {
                     new DownloadMediaDto
                     {
                         MediaTypeLabel = "Mp4",
-                        DownloadUrl = videoNode.GetAttribute("src")
+                        DownloadUrl = videoNode.GetAttribute("content")
                     }
                 }
             };
