@@ -31,7 +31,7 @@ namespace ContentLoader
             {
                 builder.AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithOrigins(config.AllowedHosts);
+                    .AllowAnyOrigin();
             }));
 
             services.AddSingleton(typeof(Config), config);
