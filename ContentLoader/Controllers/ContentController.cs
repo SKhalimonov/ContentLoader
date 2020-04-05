@@ -8,7 +8,7 @@ namespace ContentLoader.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowAnyOrigin")]
+    [EnableCors("ContentLoaderOrigins")]
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;

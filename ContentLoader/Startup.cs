@@ -25,14 +25,14 @@ namespace ContentLoader
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddCors(o => o.AddPolicy("AllowAnyOrigin", builder =>
+            Config config = Configuration.Get<Config>();
+
+            services.AddCors(o => o.AddPolicy("ContentLoaderOrigins", builder =>
             {
                 builder.AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowAnyOrigin();
+                    .WithOrigins(config.AllowedHosts);
             }));
-
-            Config config = Configuration.Get<Config>();
 
             services.AddSingleton(typeof(Config), config);
             services.AddScoped<IMediaService, MediaService>();
