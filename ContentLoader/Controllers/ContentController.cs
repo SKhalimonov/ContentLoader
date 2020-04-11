@@ -1,5 +1,6 @@
 ﻿using ContentLoader.Core.Services;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -38,7 +39,7 @@ namespace ContentLoader.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error occurred GET 'media/info'");
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 
@@ -58,7 +59,7 @@ namespace ContentLoader.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred GET 'media/download'");
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }
