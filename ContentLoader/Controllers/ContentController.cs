@@ -1,6 +1,7 @@
 ﻿using ContentLoader.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -13,9 +14,12 @@ namespace ContentLoader.Controllers
     {
         private readonly IMediaService _mediaService;
 
-        public MediaController(IMediaService mediaService)
+        private readonly ILogger<MediaController> _logger;
+
+        public MediaController(IMediaService mediaService, ILogger<MediaController> logger)
         {
             _mediaService = mediaService;
+            _logger = logger;
         }
 
         [HttpGet("info")]
@@ -33,6 +37,7 @@ namespace ContentLoader.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "Error occurred GET 'media/info'");
                 return BadRequest();
             }
         }
@@ -52,6 +57,7 @@ namespace ContentLoader.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred GET 'media/download'");
                 return BadRequest();
             }
         }
