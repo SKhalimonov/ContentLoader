@@ -15,22 +15,25 @@ namespace ContentLoader.Services
     {
         private readonly IMapper _mapper;
 
-        private readonly ServiceConfig _config;
+        private readonly ServiceConfig _serviceConfig;
+
+        private readonly Config _config;
 
         public string ServiceDomain => ServiceDomains.Instagram;
 
         public InstagramLoaderService(IMapper mapper, Config config)
         {
             _mapper = mapper;
-            _config = config.ServicesConfigs[ServiceDomain];
+            _config = config;
+            _serviceConfig = config.ServicesConfigs[ServiceDomain];
         }
 
         public async Task<VideoContentInfoDto> GetVideoInfoAsync(string url)
         {
-            var webDriver = new ChromeDriver();
+            var webDriver = new ChromeDriver(_config.GetBrowserEnginePath());
             webDriver.Url = url;
 
-            var videoNode = webDriver.FindElementByXPath(_config.VideoSelector);
+            var videoNode = webDriver.FindElementByXPath(_serviceConfig.VideoSelector);
 
             var result = new VideoContentInfoDto
             {

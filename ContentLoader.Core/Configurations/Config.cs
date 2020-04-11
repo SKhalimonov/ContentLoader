@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace ContentLoader.Core.Configurations
 {
@@ -7,5 +8,14 @@ namespace ContentLoader.Core.Configurations
         public Dictionary<string, ServiceConfig> ServicesConfigs { get; set; }
 
         public string[] AllowedHosts { get; set; }
+
+        public string WebPath { get; set; }
+
+        public string BrowserEngineName { get; set; }
+
+        public string GetBrowserEnginePath()
+        {
+            return Path.Combine(WebPath, BrowserEngineName);
+        }
     }
 }

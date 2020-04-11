@@ -1,4 +1,5 @@
-﻿using ContentLoader.Core.Services;
+﻿using ContentLoader.Core.Configurations;
+using ContentLoader.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,13 @@ namespace ContentLoader.Controllers
 
         private readonly ILogger<MediaController> _logger;
 
-        public MediaController(IMediaService mediaService, ILogger<MediaController> logger)
+        private readonly Config _config;
+
+        public MediaController(IMediaService mediaService, ILogger<MediaController> logger, Config config)
         {
             _mediaService = mediaService;
             _logger = logger;
+            _config = config;
         }
 
         [HttpGet("info")]
@@ -30,6 +34,8 @@ namespace ContentLoader.Controllers
             {
                 return BadRequest("Url is required");
             }
+
+            _logger.LogInformation(_config.GetBrowserEnginePath());
 
             try
             {
