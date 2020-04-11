@@ -29,7 +29,7 @@ namespace ContentLoader.Services
 
         public async Task<VideoContentInfoDto> GetVideoInfoAsync(string url)
         {
-            var webDriver = new ChromeDriver(_config.GetBrowserEnginePath());
+            var webDriver = new ChromeDriver(_config.ContentRootPath);
             webDriver.Url = url;
 
             var videoNode = webDriver.FindElementByXPath(_serviceConfig.VideoSelector);
