@@ -9,13 +9,13 @@ namespace ContentLoader.Core.Configurations
 
         public string[] AllowedHosts { get; set; }
 
-        public string WebPath { get; set; }
+        public string ContentRootPath { get; set; }
 
         public string BrowserEngineName { get; set; }
 
         public string GetBrowserEnginePath()
         {
-            return Path.Combine(WebPath, BrowserEngineName);
+            return Path.Combine(ContentRootPath, BrowserEngineName);
         }
     }
 }

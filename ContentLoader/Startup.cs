@@ -7,36 +7,36 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace ContentLoader
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Config = Configuration.Get<Config>();
+            Config.ContentRootPath = environment.ContentRootPath;
         }
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
+        public Config Config { set; get; }
+
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(option => option.EnableEndpointRouting = false);
 
             services.AddAutoMapper(typeof(Startup));
 
-            Config config = Configuration.Get<Config>();
-            config.WebPath = env.WebRootPath;
-
             services.AddCors(o => o.AddPolicy("ContentLoaderOrigins", builder =>
             {
                 builder.AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithOrigins(config.AllowedHosts);
+                    .WithOrigins(Config.AllowedHosts);
             }));
 
-            services.AddSingleton(typeof(Config), config);
+            services.AddSingleton(typeof(Config), Config);
             services.AddScoped<IMediaService, MediaService>();
         }
 
